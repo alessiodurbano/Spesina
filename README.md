@@ -1,4 +1,3 @@
-Spesina 🚀
 Benvenuti nel progetto Spesina: la spesa con un semplice scatto! 📸✨
 
 Spesina è un'app innovativa che permette di fare la spesa in modo super smart. Basta scattare una foto alla tua lista, e noi ci occupiamo di tutto il resto: riconosciamo i prodotti, ottimizziamo la tua lista e ti consegniamo la spesa direttamente a casa. Facile, veloce e conveniente!
