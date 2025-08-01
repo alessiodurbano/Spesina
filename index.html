@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spesina</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #FAF9F6;
+      color: #333333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #6BAA75;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+      font-weight: normal;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      max-width: 600px;
+    }
+    .city-note {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .step {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      text-align: center;
+      max-width: 400px;
+    }
+    .button {
+      background-color: #6BAA75;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .button:hover {
+      background-color: #5b9264;
+    }
+    /* Popup styles */
+    #popupOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #popup {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+    #popup h3 {
+      margin-top: 0;
+      color: #6BAA75;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    #popup label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      color: #555;
+    }
+    #popup input[type="text"],
+    #popup select,
+    #popup input[type="file"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 0.4rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    #popup button {
+      background-color: #6BAA75;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: block;
+      margin: 0 auto;
+    }
+    #popup button:hover {
+      background-color: #5b9264;
+    }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+
+    /* WhatsApp assistenza button */
+    #whatsappAssist {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      z-index: 1100;
+      font-size: 30px;
+      text-decoration: none;
+    }
+    /* Desktop assistenza text */
+    #whatsappAssistDesktop {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      z-index: 1100;
+      text-decoration: none;
+      display: none;
+      align-items: center;
+    }
+    /* Responsive */
+    @media (min-width: 600px) {
+      #whatsappAssistDesktop { display: flex; }
+      #whatsappAssist { display: none; }
+    }
+    @media (max-width: 599px) {
+      #whatsappAssistDesktop { display: none; }
+      #whatsappAssist { display: flex; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Spesina</h1>
+  <h2>Fai la spesa con una foto. Scatta la tua lista, noi la leggiamo, ottimizziamo e te la portiamo a casa.</h2>
+  <div class="city-note">* Servizio attivo solo nella città di Vasto</div>
+
+  <div class="steps">
+    <div class="step">📸 <strong>Scatta la lista</strong><br />Carica una foto scritta a mano o una nota.</div>
+    <div class="step">🧠 <strong>Noi leggiamo e ottimizziamo</strong><br />Troviamo i migliori prodotti nei migliori negozi.</div>
+    <div class="step">🛵 <strong>Ti portiamo la spesa a casa</strong><br />Consegna rapida, fatta da giovani della tua zona.</div>
+  </div>
+
+  <a class="button" href="#" id="startOrderBtn">
+    Iniziamo, carica la tua lista 📋
+  </a>
+
+  <!-- Popup per indirizzo e modalità -->
+  <div id="popupOverlay">
+    <div id="popup">
+      <h3>Dettagli di consegna</h3>
+      <form id="orderForm">
+        <label for="addressInput">Indirizzo di consegna *</label>
+        <input type="text" id="addressInput" name="address" placeholder="Via, civico, città" required />
+
+        <label for="deliveryMode">Modalità di consegna *</label>
+        <select id="deliveryMode" name="deliveryMode" required>
+          <option value="" disabled selected>Seleziona modalità</option>
+          <option value="in_giornata">Consegna in giornata (30-60 min)</option>
+          <option value="programmata">Consegna programmata</option>
+        </select>
+
+        <label for="photoInput">Scatta o carica la foto della lista</label>
+        <input type="file" accept="image/*" capture="environment" id="photoInput" name="photo" />
+
+        <button type="submit">Invia ordine via WhatsApp</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- WhatsApp assistenza -->
+  <a href="https://wa.me/393714885336?text=Ciao%2C%20ho%20bisogno%20di%20assistenza%20per%20Spesina." target="_blank" id="whatsappAssist" title="Assistenza WhatsApp">
+    &#x1F4AC;
+  </a>
+  <a href="https://wa.me/393714885336?text=Ciao%2C%20ho%20bisogno%20di%20assistenza%20per%20Spesina." target="_blank" id="whatsappAssistDesktop" title="Assistenza WhatsApp">
+    Hai bisogno di una mano? Chiedi qui
+  </a>
+
+  <footer>
+    🚀 Un progetto creato da ragazzi. Perché l’innovazione parte da chi ha fame di fare.
+  </footer>
+
+  <script>
+    const startOrderBtn = document.getElementById('startOrderBtn');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const orderForm = document.getElementById('orderForm');
+    const deliveryMode = document.getElementById('deliveryMode');
+
+    startOrderBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      popupOverlay.style.display = 'flex';
+    });
+
+    popupOverlay.addEventListener('click', (e) => {
+      if (e.target === popupOverlay) {
+        popupOverlay.style.display = 'none';
+        orderForm.reset();
+      }
+    });
+
+    orderForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const address = document.getElementById('addressInput').value.trim();
+      const mode = deliveryMode.value;
+      // Foto la gestiamo solo localmente, non inviata via WhatsApp
+      // const photo = document.getElementById('photoInput').files[0];
+
+      if (!address || !mode) {
+        alert('Per favore compila tutti i campi obbligatori.');
+        return;
+      }
+
+      let msg = `Ciao! 😊%0AVorrei fare un ordine con Spesina.%0A`;
+      msg += `📍 Indirizzo di consegna: ${encodeURIComponent(address)}.%0A`;
+      msg += `🚚 Modalità di consegna: ${mode === 'in_giornata' ? 'Consegna in giornata (30-60 min)' : 'Consegna programmata'}.%0A%0A`;
+      msg += `Adesso ti invio la foto della mia lista, grazie mille! 📸🙏`;
+
+      // Numero WhatsApp (formato internazionale senza +)
+      const phoneNumber = '393714885336';
+
+      const url = `https://wa.me/${phoneNumber}?text=${msg}`;
+
+      window.open(url, '_blank');
+
+      popupOverlay.style.display = 'none';
+      orderForm.reset();
+    });
+  </script>
+</body>
+</html>
